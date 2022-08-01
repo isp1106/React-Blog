@@ -12,7 +12,7 @@ function App() {
   const [like, setLike] = useState([0, 0, 0]);
   const [modal, setModal] = useState(false);
   const [title, setTitle] = useState(0);
-
+  const [insert, setInsert] = useState("");
   return (
     <div className='App'>
       <div className='black-nav'>
@@ -30,7 +30,6 @@ function App() {
           가나다순 정렬
         </button>
       </div>
-
       {postTitle.map((a, i) => {
         return (
           <div className='list' key={i}>
@@ -41,18 +40,28 @@ function App() {
               }}
             >
               {postTitle[i]}
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  let copy = [...like];
+                  copy[i] = copy[i] + 1;
+                  setLike(copy);
+                }}
+              >
+                👍
+              </span>
             </h4>
-            <span
-              onClick={() => {
-                let copy = [...like];
-                copy[i] = copy[i] + 1;
-                setLike(copy);
-              }}
-            >
-              👍
-            </span>
             {like[i]}
             <p>2월 17일 발행</p>
+            <button
+              onClick={() => {
+                let copy = [...postTitle];
+                copy.splice(i, 1);
+                setPostTitle(copy);
+              }}
+            >
+              글 삭제
+            </button>
           </div>
         );
       })}
@@ -63,6 +72,20 @@ function App() {
           postTitle={postTitle}
         />
       ) : null}
+      <input
+        onChange={(e) => {
+          setInsert(e.target.value);
+        }}
+      />
+      <button
+        onClick={() => {
+          let copy = [...postTitle];
+          copy.unshift(insert);
+          setPostTitle(copy);
+        }}
+      >
+        글 발행
+      </button>
     </div>
   );
 }
